@@ -2,10 +2,15 @@
   "name": "rxjs-carousel",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
+    "tsc": "tsc",
+    "tsc:init": "tsc --init",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^4.5.5"
+  }
 }
