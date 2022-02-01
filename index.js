@@ -1,5 +1,3 @@
 "use strict";
-const foo = () => {
-    console.log('hihihihi');
-};
-foo();
+const $view = document.getElementById("carousel");
+console.log("$view", $view);

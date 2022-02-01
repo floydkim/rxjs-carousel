@@ -1,9 +1,3 @@
-const foo = () => {
-    console.log("hihihihi");
+const $view = document.getElementById("carousel");
 
-    const foo = "asdf";
-    
-    const a = 1;
-}
-
-foo();
+console.log("$view", $view);
