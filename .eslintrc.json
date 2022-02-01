@@ -1,0 +1,18 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "quotes": ["error", "double"],
+    "no-multiple-empty-lines": "error",
+    "keyword-spacing": "error",
+    "space-infix-ops": "error"
+  }
+}

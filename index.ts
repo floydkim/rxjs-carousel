@@ -1,5 +1,9 @@
 const foo = () => {
-    console.log('hihihihi');
+    console.log("hihihihi");
+
+    const foo = "asdf";
+    
+    const a = 1;
 }
 
 foo();
