@@ -18,6 +18,7 @@ const EVENTS = {
     end: SUPPORT_TOUCH ? "touchend" : "mouseup"
 }
 
+// $view 에서 발생하는 이벤트 중 관심있는 이벤트들을 옵저버블로 만듦
 export const makeObservable = () => {
     const start$ = fromEvent($view, EVENTS.start);
     const move$ = fromEvent($view, EVENTS.move);
