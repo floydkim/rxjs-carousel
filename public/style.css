@@ -1,16 +1,19 @@
 .view {
-  overflow: hidden;
+    overflow: hidden;
+    background-color: lightblue;
+    width: 100%;
+    min-height: 100px;
 }
 
 .view .container {
-  white-space: nowrap;
-  padding: 0px;
-  list-style: none;
-  font-size: 0;
+    white-space: nowrap;
+    padding: 0px;
+    list-style: none;
+    font-size: 0;
 }
 
 .view .panel {
-  width: 100%;
-  min-height: 200px;
-  display: inline-block;
+    width: 100%;
+    min-height: 200px;
+    display: inline-block;
 }
