@@ -24,7 +24,7 @@ export const makeObservable = () => {
 
     /**
      * 드래그 이벤트 옵저버블
-     * 
+     *
      * ```
         const drag$ = start$.pipe(
             map(start => move$.pipe(takeUntil(end$))),
@@ -38,22 +38,22 @@ export const makeObservable = () => {
      * 여기까지만 구현하면 drag$는 move$ 옵저버블로 이뤄진 옵저버블이 된다. (중첩)
      * drag$ 옵저버블을 구독해 move$가 emit 하는 값을 얻을 수 있도록
      * `mergeAll`을 사용해 중첩된 옵저버블을 flatten한다.
-     * 
+     *
      * ```
         const drag$ = start$.pipe(map(..), mergeAll());
      * ```
-     * 
+     *
      * 이 때 map과 merge를 한번에 수행하는 `mergeMap` 오퍼레이터를 사용할 수 있다.
      * ```
         const drag$ = start$.pipe(
             mergeMap(start => move$.pipe(takeUntil(end$))),
         );
      * ```
-     * 
+     *
      * 내 생각엔 마우스가 해피케이스대로 동작한다면
      * mousedown 이벤트가 한번 더 발생하기 전에 end$의 값이 먼저 emit되므로
      * 기존 move$ 옵저버블이 종료된 다음 또다른 move$ 옵저버블이 발생할 것 같다.
-     * 
+     *
      * 책에서는 unhappy한 케이스를 대비하기 위해서일지, 일반적으로 적용해도 괜찮은 오퍼레이터여서 그런건지
      * `switchMap`을 사용하는 것이 최종 코드임.
      * (책설명: start$에서 데이터가 발생할 때마다 move$이 생성되기 때문에 기존 데이터를 자동으로 종료하기 위해서)
@@ -62,5 +62,5 @@ export const makeObservable = () => {
         switchMap(start => move$.pipe(takeUntil(end$))),
     );
 
-    drag$.subscribe((e) => console.log("e", e)); 
+    drag$.subscribe((e) => console.log("e", e));
 };

@@ -14,6 +14,7 @@
     "no-multiple-empty-lines": "error",
     "keyword-spacing": "error",
     "space-infix-ops": "error",
-    "semi": "error"
+    "semi": "error",
+    "no-trailing-spaces": "error"
   }
 }
