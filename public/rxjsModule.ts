@@ -1,4 +1,4 @@
-import {first, fromEvent, map, merge, mergeAll, mergeMap, pluck, switchMap, takeUntil, tap} from "rxjs";
+import {first, fromEvent, map, merge, mergeAll, mergeMap, pluck, startWith, switchMap, takeUntil, tap} from "rxjs";
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const $view = document.getElementById("carousel")!; // null이 아님을 보장할 수 있음
@@ -106,4 +106,15 @@ export const makeObservable = () => {
         switchMap(drag => end$.pipe(first()))
     );
     drop$.subscribe(drop => console.log("drop", drop));
+
+    /**
+     * 브라우저 사이즈가 변할 때 $view의 너비를 emit하는 옵저버블
+     *
+     * 첫 렌더시 "resize" 이벤트가 발생하지 않으므로, 초기값은 `startWith` 오퍼레이터를 통해 전달한다.
+     */
+    const size$ = fromEvent(window, "resize").pipe(
+        startWith($view.clientWidth),
+        map(size => $view.clientWidth),
+    );
+    size$.subscribe((ev) => console.log("ev", ev));
 };
