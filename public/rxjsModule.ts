@@ -18,9 +18,9 @@ const EVENTS = {
 
 // $view 에서 발생하는 이벤트 중 관심있는 이벤트들을 옵저버블로 만듦
 export const makeObservable = () => {
-    const start$ = fromEvent($view, EVENTS.start);
-    const move$ = fromEvent($view, EVENTS.move);
-    const end$ = fromEvent($view, EVENTS.end);
+    const start$ = fromEvent<MouseEvent>($view, EVENTS.start);
+    const move$ = fromEvent<MouseEvent>($view, EVENTS.move);
+    const end$ = fromEvent<MouseEvent>($view, EVENTS.end);
 
     /**
      * 드래그 이벤트 옵저버블
