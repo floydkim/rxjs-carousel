@@ -15,6 +15,7 @@
     "keyword-spacing": "error",
     "space-infix-ops": "error",
     "semi": "error",
-    "no-trailing-spaces": "error"
+    "no-trailing-spaces": "error",
+    "@typescript-eslint/no-empty-function": ["off"]
   }
 }
