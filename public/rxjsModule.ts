@@ -16,6 +16,11 @@ const EVENTS = {
     end:  "mouseup",
 };
 
+interface DragAndDropInterface {
+    distance: number;
+    size?: number
+};
+
 // $view 에서 발생하는 이벤트 중 관심있는 이벤트들을 옵저버블로 만듦
 export const makeObservable = () => {
     const start$ = fromEvent<MouseEvent>($view, EVENTS.start);
@@ -74,9 +79,10 @@ export const makeObservable = () => {
             return move$.pipe(
                 map(move => move.pageX - start.pageX),
                 takeUntil(end$),
-                map(distance => ({distance})), // drag$와 drop$의 데이터 형태 맞추기
+                map<number, DragAndDropInterface>(distance => ({distance})), // drag$와 drop$의 데이터 형태 맞추기
             );
         }),
+        tap((_: DragAndDropInterface) => {}), // HACK: 방출하는 값의 타입체크를 위함
         // tap(x => console.log("drag$", x)),
         share(), // drop$이 Cold Observable인 drag$에서 시작되므로, share 사용하지 않으면 drag$ 옵저버블이 중복 실행된다
     );
@@ -136,6 +142,7 @@ export const makeObservable = () => {
         ),
         withLatestFrom(size$),
         map(([distance, size]) => ({...distance, size})), // drag$와 drop$의 데이터 형태 맞추기
+        tap((_: DragAndDropInterface) => {}), // HACK: 방출하는 값의 타입체크를 위함
     );
     // drop$.subscribe(drop => console.log("drop", drop));
 
