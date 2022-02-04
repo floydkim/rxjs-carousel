@@ -74,6 +74,7 @@ export const makeObservable = () => {
             return move$.pipe(
                 map(move => move.pageX - start.pageX),
                 takeUntil(end$),
+                map(distance => ({distance})), // drag$와 drop$의 데이터 형태 맞추기
             );
         }),
         // tap(x => console.log("drag$", x)),
@@ -129,10 +130,12 @@ export const makeObservable = () => {
      */
     const drop$ = drag$.pipe(
         switchMap(dragDeltaX => end$.pipe(
-            map(event => dragDeltaX),
-            first()),
+                map(event => dragDeltaX),
+                first()
+            ),
         ),
         withLatestFrom(size$),
+        map(([distance, size]) => ({...distance, size})), // drag$와 drop$의 데이터 형태 맞추기
     );
     // drop$.subscribe(drop => console.log("drop", drop));
 
