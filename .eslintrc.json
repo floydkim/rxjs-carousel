@@ -13,6 +13,7 @@
     "quotes": ["error", "double"],
     "no-multiple-empty-lines": "error",
     "keyword-spacing": "error",
-    "space-infix-ops": "error"
+    "space-infix-ops": "error",
+    "semi": "error"
   }
 }

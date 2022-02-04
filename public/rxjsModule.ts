@@ -14,7 +14,7 @@ const EVENTS = {
     start:  "mousedown",
     move:  "mousemove",
     end:  "mouseup",
-}
+};
 
 // $view 에서 발생하는 이벤트 중 관심있는 이벤트들을 옵저버블로 만듦
 export const makeObservable = () => {
@@ -62,5 +62,5 @@ export const makeObservable = () => {
         switchMap(start => move$.pipe(takeUntil(end$))),
     );
 
-    drag$.subscribe((e) => console.log("e", e))
-}
+    drag$.subscribe((e) => console.log("e", e)); 
+};

@@ -1,3 +1,3 @@
 import { makeObservable } from "./rxjsModule";
 
-makeObservable()
+makeObservable();
