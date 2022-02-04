@@ -1,4 +1,4 @@
-import {first, fromEvent, map, merge, mergeAll, mergeMap, pluck, startWith, switchMap, takeUntil, tap, withLatestFrom} from "rxjs";
+import {first, fromEvent, map, merge, mergeAll, mergeMap, pluck, share, startWith, switchMap, takeUntil, tap, withLatestFrom} from "rxjs";
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const $view = document.getElementById("carousel")!; // null이 아님을 보장할 수 있음
@@ -76,6 +76,8 @@ export const makeObservable = () => {
                 takeUntil(end$),
             );
         }),
+        // tap(x => console.log("drag$", x)),
+        share(), // drop$이 Cold Observable인 drag$에서 시작되므로, share 사용하지 않으면 drag$ 옵저버블이 중복 실행된다
     );
     // drag$.subscribe((drag) => console.log("dragDiffX", drag));
 
@@ -132,5 +134,9 @@ export const makeObservable = () => {
         ),
         withLatestFrom(size$),
     );
-    drop$.subscribe(drop => console.log("drop", drop));
+    // drop$.subscribe(drop => console.log("drop", drop));
+
+    const carousel$ = merge(drag$, drop$);
+
+    carousel$.subscribe(carousel => console.log("carousel", carousel));
 };
