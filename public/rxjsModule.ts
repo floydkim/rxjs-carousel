@@ -1,4 +1,4 @@
-import {fromEvent, map, merge, mergeAll, mergeMap, pluck, switchMap, takeUntil, tap} from "rxjs";
+import {first, fromEvent, map, merge, mergeAll, mergeMap, pluck, switchMap, takeUntil, tap} from "rxjs";
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const $view = document.getElementById("carousel")!; // null이 아님을 보장할 수 있음
@@ -78,5 +78,32 @@ export const makeObservable = () => {
         }),
     );
 
-    drag$.subscribe((e) => console.log("e", e));
+    drag$.subscribe((drag) => console.log("dragDiffX", drag));
+
+    /**
+     * drop 옵저버블 만들기
+     *
+     * '드래그 후' 마우스를 뗄 때 발생하는 이벤트이므로 drag$를 이용해 만들어보자.
+     *
+     * ```
+        const drop$ = drag$.pipe(
+            mergeMap(drag => end$)
+        );
+     * ```
+     * 만약 이렇게만 만든다면, 모든 드래그 이벤트가 end$ 옵저버블이 되고, 마우스를 뗄 때, 드래그 이벤트마다 end$가 값을 emit한다.
+     *
+     * end$ 방출 값은 단 하나만 필요하므로 take(1) 또는 first() 오퍼레이터를 사용한다.
+     * (둘다 조건이 충족되면 옵저버블을 complete 한다.)
+     *
+     * 또한 switchMap을 적용한다.
+     *
+     * `switchAll`
+     * 이 오퍼레이터가 구독하는 source 옵저버블은 '옵저버블로 된 옵저버블'(higher-order observable 이라고도 함)이다.
+     * source가 emit하는 가장 최신 inner 옵저버블만을 구독하며 이전에 구독하던 inner 옵저버블은 구독을 해제한다.
+     * source 옵저버블과, inner 옵저버블 둘 다 complete 되어야, 이 오퍼레이터가 리턴하는 옵저버블이 complete된다.
+     */
+    const drop$ = drag$.pipe(
+        switchMap(drag => end$.pipe(first()))
+    );
+    drop$.subscribe(drop => console.log("drop", drop));
 };
