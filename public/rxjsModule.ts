@@ -1,4 +1,4 @@
-import {first, fromEvent, map, merge, mergeAll, mergeMap, pluck, startWith, switchMap, takeUntil, tap} from "rxjs";
+import {first, fromEvent, map, merge, mergeAll, mergeMap, pluck, startWith, switchMap, takeUntil, tap, withLatestFrom} from "rxjs";
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const $view = document.getElementById("carousel")!; // null이 아님을 보장할 수 있음
@@ -77,8 +77,7 @@ export const makeObservable = () => {
             );
         }),
     );
-
-    drag$.subscribe((drag) => console.log("dragDiffX", drag));
+    // drag$.subscribe((drag) => console.log("dragDiffX", drag));
 
     /**
      * drop 옵저버블 만들기
@@ -101,11 +100,13 @@ export const makeObservable = () => {
      * 이 오퍼레이터가 구독하는 source 옵저버블은 '옵저버블로 된 옵저버블'(higher-order observable 이라고도 함)이다.
      * source가 emit하는 가장 최신 inner 옵저버블만을 구독하며 이전에 구독하던 inner 옵저버블은 구독을 해제한다.
      * source 옵저버블과, inner 옵저버블 둘 다 complete 되어야, 이 오퍼레이터가 리턴하는 옵저버블이 complete된다.
+     *
+     * -> 지금 만든 drop$은 size$ 데이터를 함께 emit할 수 있도록, size$ 하단으로 이동.
      */
-    const drop$ = drag$.pipe(
-        switchMap(drag => end$.pipe(first()))
-    );
-    drop$.subscribe(drop => console.log("drop", drop));
+    // const drop$ = drag$.pipe(
+    //     switchMap(drag => end$.pipe(first()))
+    // );
+    // drop$.subscribe(drop => console.log("drop", drop));
 
     /**
      * 브라우저 사이즈가 변할 때 $view의 너비를 emit하는 옵저버블
@@ -116,5 +117,20 @@ export const makeObservable = () => {
         startWith($view.clientWidth),
         map(size => $view.clientWidth),
     );
-    size$.subscribe((ev) => console.log("ev", ev));
+    // size$.subscribe((ev) => console.log("ev", ev));
+
+    /**
+     * drop$이 x축 드래그 변화량을 emit 하도록 map하고,
+     * 동시에 size$를 통해 뷰의 너비를 emit 하도록 `withLatestFrom` 오퍼레이터를 사용한다.
+     *
+     * 이제 drop$의 값을 이용해 캐러셀을 다음 페이지로 넘길지, 현재 페이지를 유지할지 결정할 수 있다.
+     */
+    const drop$ = drag$.pipe(
+        switchMap(dragDeltaX => end$.pipe(
+            map(event => dragDeltaX),
+            first()),
+        ),
+        withLatestFrom(size$),
+    );
+    drop$.subscribe(drop => console.log("drop", drop));
 };
