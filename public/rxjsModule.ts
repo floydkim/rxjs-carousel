@@ -7,7 +7,7 @@ console.log("$view", $view);
 const $container = $view?.querySelector(".container");
 console.log("$container", $container);
 
-const PANEL_COUNT = $container?.querySelectorAll(".panel").length;
+const PANEL_COUNT = $container?.querySelectorAll(".panel").length ?? 0;
 console.log("PANEL_COUNT", PANEL_COUNT);
 
 const EVENTS = {
@@ -176,7 +176,17 @@ export const makeObservable = () => {
                 // drag 중 : 마우스 이동한 만큼 캐러셀도 이동
                 updateStore.to = updateStore.from;
             } else {
-                // drop
+                // drop : threshold보다 크게 움직였다면, 방향에 따라 인덱스를 증감 (최대최소를 넘지는 않게)
+                const THRESHOLD = 30;
+                let toBeIndex = store.index;
+                if (Math.abs(distance) > THRESHOLD) {
+                    toBeIndex = distance < 0 ?
+                        Math.min(toBeIndex + 1, PANEL_COUNT - 1) :
+                        Math.max(toBeIndex - 1, 0);
+                }
+                updateStore.index = toBeIndex;
+                updateStore.to = -(toBeIndex * size);
+                updateStore.size = size;
             }
 
             return { ...store, ...updateStore };
