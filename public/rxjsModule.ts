@@ -166,13 +166,22 @@ export const makeObservable = () => {
 
     const carousel$ = merge(drag$, drop$).pipe(
         scan<DragAndDropInterface, CarouselStateInterface>((store, {distance, size}) => {
-            const updateStore = {};
+            const updateStore: Partial<CarouselStateInterface> = {
+                from: -(store.index + store.size) + distance,
+            };
 
             console.log("distance, size", distance, size);
+
+            if (size === undefined) {
+                // drag 중 : 마우스 이동한 만큼 캐러셀도 이동
+                updateStore.to = updateStore.from;
+            } else {
+                // drop
+            }
 
             return { ...store, ...updateStore };
         }, INITIAL_STATE),
     );
 
-    carousel$.subscribe();
+    carousel$.subscribe(state => console.log("state", state));
 };
