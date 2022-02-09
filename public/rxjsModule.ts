@@ -167,7 +167,7 @@ export const makeObservable = () => {
     const carousel$ = merge(drag$, drop$).pipe(
         scan<DragAndDropInterface, CarouselStateInterface>((store, {distance, size}) => {
             const updateStore: Partial<CarouselStateInterface> = {
-                from: -(store.index + store.size) + distance,
+                from: -(store.index * store.size) + distance,
             };
 
             if (size === undefined) {
