@@ -4,7 +4,7 @@ import {first, fromEvent, map, merge, mergeAll, mergeMap, pluck, scan, share, st
 const $view = document.getElementById("carousel")!; // null이 아님을 보장할 수 있음
 console.log("$view", $view);
 
-const $container = $view?.querySelector(".container");
+const $container = $view?.querySelector(".container") as HTMLElement;
 console.log("$container", $container);
 
 const PANEL_COUNT = $container?.querySelectorAll(".panel").length ?? 0;
@@ -170,8 +170,6 @@ export const makeObservable = () => {
                 from: -(store.index + store.size) + distance,
             };
 
-            console.log("distance, size", distance, size);
-
             if (size === undefined) {
                 // drag 중 : 마우스 이동한 만큼 캐러셀도 이동
                 updateStore.to = updateStore.from;
@@ -193,5 +191,8 @@ export const makeObservable = () => {
         }, INITIAL_STATE),
     );
 
-    carousel$.subscribe(state => console.log("state", state));
+    carousel$.subscribe(store => {
+        console.log("state", store);
+        $container.style.transform = `translateX(${store.to}px)`;
+    });
 };
